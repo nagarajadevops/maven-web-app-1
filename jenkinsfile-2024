@@ -1,0 +1,25 @@
+node{
+def mavenHome = tool name: "maven3.9.5"
+//checkout code
+stage("checkout code"){
+git branch: 'development', credentialsId: '1f6d688b-d058-4d3c-9924-d1184bd2d88e', url: 'https://github.com/nagarajadevops/maven-web-application-m.git'
+}
+//Build the code
+stage("Build the code"){
+sh "$mavenHome/bin/mvn clean package"
+}
+//execute sonar report
+stage("sonar report"){
+sh "$mavenHome/bin/mvn sonar:sonar"
+}
+//upload Artifactory
+stage("uplaod artifactory to nexus"){
+sh "$mavenHome/bin/mvn deploy"
+}
+//eploy application in to Tomcat server
+stage("Deploy aplication in Tomcatserver"){
+sshagent(['cf3c4147-6f3c-4f55-ab55-57f7d66e6694']) {
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@172.31.83.68:/opt/apache-tomcat-9.0.83/webapps"
+}
+}
+}//nodeclosing
