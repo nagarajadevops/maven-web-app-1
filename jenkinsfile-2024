@@ -2,7 +2,7 @@ node{
 def mavenHome = tool name: "maven3.9.5"
 //checkout code
 stage("checkout code"){
-git branch: 'development', credentialsId: '1f6d688b-d058-4d3c-9924-d1184bd2d88e', url: 'https://github.com/nagarajadevops/maven-web-application-m.git'
+git credentialsId: '1f6d688b-d058-4d3c-9924-d1184bd2d88e', url: 'https://github.com/nagarajadevops/maven-web-app-1.git'
 }
 //Build the code
 stage("Build the code"){
